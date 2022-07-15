@@ -15,26 +15,25 @@ type BroadcastConfig struct {
 	Port      string `envconfig:"PORT" default:"8989"`
 }
 
-func broadcastEventarc(ctx context.Context, eventarcPayload EventarcPayload, topic string) error {
-	var err error
+func broadcastJobCompletedEventarc(ctx context.Context, eventarcPayload EventarcPayload, topic string) error {
+
+	pubsubClient, err := pubsub.NewClient(ctx, config.Project)
+	if err != nil {
+		logrus.Errorf("error creating a pubsub client for a topic different than default. Details: %s", err)
+		return err
+	}
+
+	defer pubsubClient.Close()
+
 	errorDetails := "none"
 	if len(eventarcPayload.ProtoPayload.ServiceData.JobCompletedEvent.Job.JobStatus.Error.Message) > 0 {
 		errorDetails = eventarcPayload.ProtoPayload.ServiceData.JobCompletedEvent.Job.JobStatus.Error.Message
 	}
 
-	pubsubClient := defaultPubsubClient
-	if topic != config.TopicName { // if the topic is not the default, create a new Client for the topic
-		pubsubClient, err = pubsub.NewClient(ctx, config.Project)
-		if err != nil {
-			logrus.Errorf("error creating a pubsub client for a topic different than default. Details: %s", err)
-			return err
-		}
-	}
-
 	// send the eventarc as pubsub message
 	eventarcPayloadBytes, err := json.Marshal(eventarcPayload)
 	if err != nil {
-		logrus.Errorf("error to marshaling pubsub message body: %w", err)
+		logrus.Errorf("error to marshaling pubsub message body: %s", err)
 		return err
 	}
 

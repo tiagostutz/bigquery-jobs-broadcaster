@@ -6,14 +6,12 @@ import (
 	"log"
 	"net/http"
 
-	"cloud.google.com/go/pubsub"
 	"github.com/kelseyhightower/envconfig"
 	"github.com/sirupsen/logrus"
 )
 
 var ctx context.Context
 var config BroadcastConfig
-var defaultPubsubClient *pubsub.Client
 
 func main() {
 	logrus.Info("starting bigquery job broadcaster server...")
@@ -24,13 +22,6 @@ func main() {
 
 	if config.Project == "" {
 		logrus.Fatal("PROJECT env var must be provided")
-	}
-
-	ps, err := pubsub.NewClient(ctx, config.Project)
-	if err != nil {
-		logrus.Warnf("there was an error initializing the default pubsub Client. This can be recovered during request handling when a new pubsub Client creation attempt will be made. Error details: %s", err)
-	} else {
-		defaultPubsubClient = ps
 	}
 
 	// handle request with Eventarc payload
@@ -67,11 +58,15 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "error decoding payload", http.StatusInternalServerError)
 	}
 
-	err = broadcastEventarc(ctx, bqEventarcRequestBody, topicToBroadcast)
+	err = broadcastJobCompletedEventarc(ctx, bqEventarcRequestBody, topicToBroadcast)
 
 	if err != nil {
 		logrus.Errorf("error broadcasting eventarc event payload to topic. Details: %s", err)
-		http.Error(w, "error broadcasting eventarc to Topic", http.StatusInternalServerError)
+		http.Error(w, "error broadcasting eventarc to pubsub topic", http.StatusInternalServerError)
 	}
+
+	json.NewEncoder(w).Encode(map[string]string{
+		"jobID": bqEventarcRequestBody.ProtoPayload.ServiceData.JobCompletedEvent.Job.JobName.JobID,
+	})
 
 }

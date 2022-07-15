@@ -2,6 +2,11 @@ package main
 
 import "time"
 
+const (
+	EventarcType       = "type.googleapis.com/google.cloud.audit.AuditLog"
+	EventarcMethodName = "jobservice.jobcompleted"
+)
+
 type EventarcPayload struct {
 	ProtoPayload struct {
 		Type   string `json:"@type"`
