@@ -15,7 +15,7 @@ type BroadcastConfig struct {
 	Port      string `envconfig:"PORT" default:"8989"`
 }
 
-func broadcastJobCompletedEventarc(ctx context.Context, eventarcPayload EventarcPayload, topic string) error {
+func publishJobCompletedEventarcBroadcast(ctx context.Context, eventarcPayload EventarcPayload, topic string) error {
 
 	pubsubClient, err := pubsub.NewClient(ctx, config.Project)
 	if err != nil {

@@ -1,0 +1,8 @@
+version: "3.7"
+
+services:
+  gcp-pubsub-emulator:
+    image: storytel/gcp-pubsub-emulator
+    command: --host=0.0.0.0 --port=8262
+    ports:
+      - 8262:8262

@@ -22,9 +22,14 @@ func TestBroadcastJobCompletedEventarc(t *testing.T) {
 	defer client.Close()
 
 	topicID := os.Getenv("TOPIC")
-	topic, err := client.CreateTopic(ctx, topicID)
-	if err != nil {
-		t.Errorf("Error creating the topic: %s", err)
+	topic := client.Topic(topicID)
+	if topic == nil {
+		topic, err = client.CreateTopic(ctx, topicID)
+		if err != nil {
+			t.Errorf("Error creating the topic: %s", err)
+		}
 	}
 	assert.NotNil(t, topic)
+
+	publishJobCompletedEventarcBroadcast(ctx, EventarcPayload{}, topicID)
 }

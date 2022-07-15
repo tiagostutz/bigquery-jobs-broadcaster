@@ -58,7 +58,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "error decoding payload", http.StatusInternalServerError)
 	}
 
-	err = broadcastJobCompletedEventarc(ctx, bqEventarcRequestBody, topicToBroadcast)
+	err = publishJobCompletedEventarcBroadcast(ctx, bqEventarcRequestBody, topicToBroadcast)
 
 	if err != nil {
 		logrus.Errorf("error broadcasting eventarc event payload to topic. Details: %s", err)
