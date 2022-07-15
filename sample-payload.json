@@ -1,0 +1,120 @@
+{
+  "protoPayload": {
+    "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+    "status": {},
+    "authenticationInfo": {
+      "principalEmail": "account-dummy@mock-company.iam.gserviceaccount.com"
+    },
+    "requestMetadata": {
+      "callerIp": "211.181.127.11",
+      "callerSuppliedUserAgent": "gcloud-golang-bigquery/20201104,gzip(gfe)",
+      "callerNetwork": "//compute.googleapis.com/projects/local-test/global/networks/__unknown__",
+      "requestAttributes": {},
+      "destinationAttributes": {}
+    },
+    "serviceName": "bigquery.googleapis.com",
+    "methodName": "jobservice.jobcompleted",
+    "resourceName": "projects/local-test/jobs/NCzY2LmZfWDAjeNaxdwQ61FIoTO",
+    "serviceData": {
+      "@type": "type.googleapis.com/google.cloud.bigquery.logging.v1.AuditData",
+      "jobCompletedEvent": {
+        "eventName": "query_job_completed",
+        "job": {
+          "jobName": {
+            "projectId": "local-test",
+            "jobId": "NCzY2LmZfWDAjeNaxdwQ61FIoTO",
+            "location": "US"
+          },
+          "jobConfiguration": {
+            "query": {
+              "query": "SELECT * FROM `randomproject-data.randomdataset.randomtable1`, `randomproject-data.randomdataset.randomtable2`, `randomproject-data.randomdataset.randomtable3`, `randomproject-data.randomdataset.randomview1` WHERE timestamp <= @EndDate\t\t\t\t-- REQUIRED AS A QUERY PARAM",
+              "destinationTable": {
+                "projectId": "local-test",
+                "datasetId": "_aaaf7df656ffe8e48c2cba9b34d825794ebaa7e5",
+                "tableId": "025b16924anon7adadaa0720f578631574f74ffe5a9c"
+              },
+              "createDisposition": "CREATE_IF_NEEDED",
+              "writeDisposition": "WRITE_TRUNCATE",
+              "defaultDataset": {},
+              "queryPriority": "QUERY_INTERACTIVE",
+              "statementType": "SELECT"
+            }
+          },
+          "jobStatus": {
+            "state": "DONE",
+            "error": {}
+          },
+          "jobStatistics": {
+            "createTime": "2022-07-14T19:59:43.007Z",
+            "startTime": "2022-07-14T19:59:43.088Z",
+            "endTime": "2022-07-14T19:59:46.469Z",
+            "totalProcessedBytes": "11627392211",
+            "totalBilledBytes": "11627659264",
+            "billingTier": 1,
+            "totalSlotMs": "798390",
+            "referencedTables": [
+              {
+                "projectId": "localproject-data",
+                "datasetId": "randomdataset",
+                "tableId": "randomtable1"
+              },
+              {
+                "projectId": "localproject-data",
+                "datasetId": "reporting",
+                "tableId": "randomtable2"
+              },
+              {
+                "projectId": "localproject-data",
+                "datasetId": "reporting",
+                "tableId": "randomtable3"
+              }
+            ],
+            "totalTablesProcessed": 3,
+            "referencedViews": [
+              {
+                "projectId": "randomproject-data",
+                "datasetId": "randomdataset",
+                "tableId": "randomview1"
+              }
+            ],
+            "totalViewsProcessed": 1,
+            "reservationUsage": [
+              {
+                "name": "projects/localproject-data",
+                "slotMs": "585815"
+              },
+              {
+                "name": "projects/localproject-data/fake1",
+                "slotMs": "47842"
+              },
+              {
+                "name": "projects/localproject-data/fake2",
+                "slotMs": "1730"
+              },
+              {
+                "name": "projects/localproject-data/default",
+                "slotMs": "44516"
+              },
+              {
+                "name": "projects/localproject-data/fake3",
+                "slotMs": "25754"
+              }
+            ],
+            "queryOutputRowCount": "1"
+          }
+        }
+      }
+    }
+  },
+  "insertId": "-lcrke4e1zxoh",
+  "resource": {
+    "type": "bigquery_resource",
+    "labels": {
+      "project_id": "local-test"
+    }
+  },
+  "timestamp": "2022-07-14T19:59:46.472146Z",
+  "severity": "INFO",
+  "logName": "projects/local-test/logs/cloudaudit.googleapis.com%2Fdata_access",
+  "receiveTimestamp": "2022-07-14T19:59:46.515976125Z"
+}

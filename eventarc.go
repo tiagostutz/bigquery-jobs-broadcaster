@@ -3,8 +3,8 @@ package main
 import "time"
 
 const (
-	EventarcType       = "type.googleapis.com/google.cloud.audit.AuditLog"
-	EventarcMethodName = "jobservice.jobcompleted"
+	EventarcTypeAuditLog           = "type.googleapis.com/google.cloud.audit.AuditLog"
+	EventarcMethodNameJobCompleted = "jobservice.jobcompleted"
 )
 
 type EventarcPayload struct {
@@ -18,6 +18,11 @@ type EventarcPayload struct {
 		RequestMetadata struct {
 			CallerIP                string `json:"callerIp"`
 			CallerSuppliedUserAgent string `json:"callerSuppliedUserAgent"`
+			CallerNetwork           string `json:"callerNetwork"`
+			RequestAttributes       struct {
+			} `json:"requestAttributes"`
+			DestinationAttributes struct {
+			} `json:"destinationAttributes"`
 		} `json:"requestMetadata"`
 		ServiceName  string `json:"serviceName"`
 		MethodName   string `json:"methodName"`
@@ -68,7 +73,13 @@ type EventarcPayload struct {
 							TableID   string `json:"tableId"`
 						} `json:"referencedTables"`
 						TotalTablesProcessed int `json:"totalTablesProcessed"`
-						ReservationUsage     []struct {
+						ReferencedViews      []struct {
+							ProjectID string `json:"projectId"`
+							DatasetID string `json:"datasetId"`
+							TableID   string `json:"tableId"`
+						} `json:"referencedViews"`
+						TotalViewsProcessed int `json:"totalViewsProcessed"`
+						ReservationUsage    []struct {
 							Name   string `json:"name"`
 							SlotMs string `json:"slotMs"`
 						} `json:"reservationUsage"`
@@ -77,5 +88,16 @@ type EventarcPayload struct {
 				} `json:"job"`
 			} `json:"jobCompletedEvent"`
 		} `json:"serviceData"`
-	}
+	} `json:"protoPayload"`
+	InsertID string `json:"insertId"`
+	Resource struct {
+		Type   string `json:"type"`
+		Labels struct {
+			ProjectID string `json:"project_id"`
+		} `json:"labels"`
+	} `json:"resource"`
+	Timestamp        time.Time `json:"timestamp"`
+	Severity         string    `json:"severity"`
+	LogName          string    `json:"logName"`
+	ReceiveTimestamp time.Time `json:"receiveTimestamp"`
 }
